@@ -30,7 +30,7 @@ module Rack
         end
 
         def write(key, entries)
-          cache.set(hexdigest(key), entries)
+          cache.setex(hexdigest(key), RedisRackCache.max_cache_seconds, entries)
         end
 
         def purge(key)

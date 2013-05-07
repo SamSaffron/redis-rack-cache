@@ -37,9 +37,9 @@ module Rack
           key, size = slurp(body){|part| buf.write(part) }
 
           if ttl.zero?
-            [key, size] if cache.set(key, buf.string)
+            [key, size] if cache.setex(key, RedisRackCache.max_cache_seconds, buf.string)
           else
-            [key, size] if cache.setex(key, ttl, buf.string)
+            [key, size] if cache.setex(key, [ttl,RedisRackCache.max_cache_seconds].min, buf.string)
           end
         end
 
